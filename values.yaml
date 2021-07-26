@@ -40,7 +40,8 @@ secrets:
 
 service:
   type: ClusterIP
-  restPort: 3000
+  port: 3000
+
 serverUrl: {}
 
 nodeSelector: {}
