@@ -18,9 +18,11 @@ spec:
       containers:
       - name: {{ include "thunderhub-helm.fullname" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["/bin/sh"]
+        args: ["-c", "cp /data/thunderhub/account_config.yaml /data/thunderhub/ac_writable.yaml; npm start"]
         env:
         - name: ACCOUNT_CONFIG_PATH
-          value: '/data/thunderhub/account_config.yaml'
+          value: '/data/thunderhub/ac_writable.yaml'
         ports:
         - name: http
           protocol: TCP
