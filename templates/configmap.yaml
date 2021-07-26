@@ -16,5 +16,5 @@ data:
 kind: ConfigMap
 metadata:
   name: {{ include "thunderhub-helm.fullname" . }}-config
-	labels:
+  labels:
     {{- include "thunderhub-helm.labels" . | nindent 4 }}
