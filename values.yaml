@@ -1,0 +1,50 @@
+# Default values for thunderhub-helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: docker.io/apotdevin/thunderhub
+  pullPolicy: IfNotPresent
+  tag: "v0.12.21"
+
+podAnnotations: {}
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+livenessProbe:
+  enabled: false
+
+readinessProbe:
+  enabled: false
+
+secrets:
+  certificates:
+    path: "/data/.lnd/"
+    enable: true
+    secretName: thunderhub-connection-secrets
+  env:
+    enable: true
+    secretName: secrets-env
+
+service:
+  type: ClusterIP
+  restPort: 3000
+serverUrl: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

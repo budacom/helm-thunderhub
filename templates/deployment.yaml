@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "thunderhub-helm.fullname" . }}
+  labels:
+    {{- include "thunderhub-helm.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "thunderhub-helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "thunderhub-helm.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: {{ include "thunderhub-helm.fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        env:
+        - name: ACCOUNT_CONFIG_PATH
+          value: '/data/thunderhub/account_config.yaml'
+        ports:
+        - name: http
+          protocol: TCP
+          containerPort: 3000
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            port: 3000
+            path: /login
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            port: 3000
+            path: /login
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        {{- end}}
+        imagePullPolicy: Always
+        resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- if .Values.secrets.env.enable }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.secrets.env.secretName }}
+        {{- end }}
+        volumeMounts:
+        {{- if .Values.certificateSecrets.enable }}
+        - name: {{ .Values.secrets.certificates.secretName }}
+          readOnly: true
+          mountPath: {{ .Values.secrets.certificates.path }}
+        {{- end }}
+        - name: {{ include "thunderhub-helm.fullname" . }}-config
+          readOnly: true
+          mountPath: /data/thunderhub
+      volumes:
+      {{- if .Values.certificateSecrets.enable }}
+      - name: {{ .Values.secrets.certificates.secretName }}
+        secret:
+          defaultMode: 420
+          secretName: {{ .Values.secrets.certificates.secretName }}
+      {{- end }}
+      - name: {{ include "thunderhub-helm.fullname" . }}-config
+        configMap:
+          name: {{ include "thunderhub-helm.fullname" . }}-config
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
