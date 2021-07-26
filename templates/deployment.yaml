@@ -67,7 +67,7 @@ spec:
       - name: {{ include "thunderhub-helm.fullname" . }}-config
         configMap:
           name: {{ include "thunderhub-helm.fullname" . }}-config
-          defaultMode: 777
+          defaultMode: 0777
   strategy:
     type: RollingUpdate
     rollingUpdate:
