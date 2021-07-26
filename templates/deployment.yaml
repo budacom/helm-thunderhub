@@ -50,7 +50,7 @@ spec:
             name: {{ .Values.secrets.env.secretName }}
         {{- end }}
         volumeMounts:
-        {{- if .Values.certificateSecrets.enable }}
+        {{- if .Values.secrets.certificates.enable }}
         - name: {{ .Values.secrets.certificates.secretName }}
           readOnly: true
           mountPath: {{ .Values.secrets.certificates.path }}
@@ -58,7 +58,7 @@ spec:
         - name: {{ include "thunderhub-helm.fullname" . }}-config
           mountPath: /data/thunderhub
       volumes:
-      {{- if .Values.certificateSecrets.enable }}
+      {{- if .Values.secrets.certificates.enable }}
       - name: {{ .Values.secrets.certificates.secretName }}
         secret:
           defaultMode: 420
