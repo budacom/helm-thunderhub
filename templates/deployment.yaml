@@ -56,7 +56,6 @@ spec:
           mountPath: {{ .Values.secrets.certificates.path }}
         {{- end }}
         - name: {{ include "thunderhub-helm.fullname" . }}-config
-          readOnly: true
           mountPath: /data/thunderhub
       volumes:
       {{- if .Values.certificateSecrets.enable }}
@@ -68,6 +67,7 @@ spec:
       - name: {{ include "thunderhub-helm.fullname" . }}-config
         configMap:
           name: {{ include "thunderhub-helm.fullname" . }}-config
+          defaultMode: 777
   strategy:
     type: RollingUpdate
     rollingUpdate:
