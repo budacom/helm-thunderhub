@@ -48,8 +48,6 @@ spec:
           periodSeconds: 5
         {{- end}}
         imagePullPolicy: Always
-        resources:
-            {{- toYaml .Values.resources | nindent 12 }}
         {{- if .Values.secrets.env.enable }}
         envFrom:
         - secretRef:
