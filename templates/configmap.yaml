@@ -2,6 +2,7 @@ apiVersion: v1
 data:
   account_config.yaml: |
     masterPassword: 'coolhackablepassword'
+    defaultNetwork: {{ .Values.network }}
     accounts:
       - name: 'user'
         serverUrl: '{{ .Values.serverUrl }}:10009'
