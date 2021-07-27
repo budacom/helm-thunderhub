@@ -35,7 +35,7 @@ spec:
         livenessProbe:
           httpGet:
             port: 3000
-            path: {{- .Values.livenessProbe.path }}
+            path: {{ .Values.livenessProbe.path }}
           initialDelaySeconds: 5
           periodSeconds: 10
         {{- end }}
@@ -43,10 +43,10 @@ spec:
         readinessProbe:
           httpGet:
             port: 3000
-            path: {{- .Values.readinessProbe.path }}
+            path: {{ .Values.readinessProbe.path }}
           initialDelaySeconds: 5
           periodSeconds: 5
-        {{- end}}
+        {{- end }}
         imagePullPolicy: Always
         {{- if .Values.secrets.env.enable }}
         envFrom:
