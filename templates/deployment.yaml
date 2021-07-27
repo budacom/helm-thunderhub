@@ -19,7 +19,11 @@ spec:
       - name: {{ include "thunderhub-helm.fullname" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         command: ["/bin/sh"]
+        {{- if .Values.secrets.account_config.enable}}
+        args: ["-c", "cp {{ .Values.secrets.account_config.path }}/config.yaml /data/ac_writable.yaml; npm start"]
+        {{- else }}
         args: ["-c", "cp /data/thunderhub/account_config.yaml /data/ac_writable.yaml; npm start"]
+        {{- end }}
         env:
         - name: ACCOUNT_CONFIG_PATH
           value: '/data/ac_writable.yaml'
@@ -57,6 +61,11 @@ spec:
           readOnly: true
           mountPath: {{ .Values.secrets.certificates.path }}/
         {{- end }}
+        {{- if .Values.secrets.account_config.enable }}
+        - name: {{ .Values.secrets.account_config.secretName }}
+          readOnly: true
+          mountPath: {{ .Values.secrets.account_config.path }}/
+        {{- end }}
         - name: {{ include "thunderhub-helm.fullname" . }}-config
           mountPath: /data/thunderhub
       volumes:
@@ -66,6 +75,12 @@ spec:
           defaultMode: 420
           secretName: {{ .Values.secrets.certificates.secretName }}
       {{- end }}
+      {{- if .Values.secrets.account_config.enable }}
+      - name: {{ .Values.secrets.account_config.secretName }}
+        secret:
+          defaultMode: 420
+          secretName: {{ .Values.secrets.account_config.secretName }}
+      {{- end}}
       - name: {{ include "thunderhub-helm.fullname" . }}-config
         configMap:
           name: {{ include "thunderhub-helm.fullname" . }}-config

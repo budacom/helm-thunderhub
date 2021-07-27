@@ -39,6 +39,10 @@ secrets:
   env:
     enable: true
     secretName: secrets-env
+  account_config:
+    enable: false
+    secretName: config-secret
+    path: /data/config_secret
 
 service:
   type: ClusterIP
