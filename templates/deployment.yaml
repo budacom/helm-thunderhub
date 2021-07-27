@@ -35,7 +35,7 @@ spec:
         livenessProbe:
           httpGet:
             port: 3000
-            path: {{- if .Values.livenessProbe.path }}
+            path: {{- .Values.livenessProbe.path }}
           initialDelaySeconds: 5
           periodSeconds: 10
         {{- end }}
@@ -80,7 +80,7 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ .Values.secrets.account_config.secretName }}
-      {{- end}}
+      {{- end }}
       - name: {{ include "thunderhub-helm.fullname" . }}-config
         configMap:
           name: {{ include "thunderhub-helm.fullname" . }}-config
