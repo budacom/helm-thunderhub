@@ -25,13 +25,15 @@ resources: {}
 
 livenessProbe:
   enabled: false
+  path: "/thub/login"
 
 readinessProbe:
   enabled: false
+  path: "/thub/login"
 
 secrets:
   certificates:
-    path: "/data/.lnd/"
+    path: "/data/.lnd"
     enable: true
     secretName: thunderhub-connection-secrets
   env:
@@ -41,6 +43,7 @@ secrets:
 service:
   type: ClusterIP
   port: 3000
+
 
 serverUrl: {}
 

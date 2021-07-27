@@ -31,7 +31,7 @@ spec:
         livenessProbe:
           httpGet:
             port: 3000
-            path: /login
+            path: {{- if .Values.livenessProbe.path }}
           initialDelaySeconds: 5
           periodSeconds: 10
         {{- end }}
@@ -39,7 +39,7 @@ spec:
         readinessProbe:
           httpGet:
             port: 3000
-            path: /login
+            path: {{- .Values.readinessProbe.path }}
           initialDelaySeconds: 5
           periodSeconds: 5
         {{- end}}
@@ -55,7 +55,7 @@ spec:
         {{- if .Values.secrets.certificates.enable }}
         - name: {{ .Values.secrets.certificates.secretName }}
           readOnly: true
-          mountPath: {{ .Values.secrets.certificates.path }}
+          mountPath: {{ .Values.secrets.certificates.path }}/
         {{- end }}
         - name: {{ include "thunderhub-helm.fullname" . }}-config
           mountPath: /data/thunderhub
