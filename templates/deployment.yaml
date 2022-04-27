@@ -20,9 +20,9 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         command: ["/bin/sh"]
         {{- if .Values.secrets.account_config.enable}}
-        args: ["-c", "cp {{ .Values.secrets.account_config.path }}/config.yaml /data/ac_writable.yaml; npm start"]
+        args: ["-c", "cp {{ .Values.secrets.account_config.path }}/config.yaml /data/ac_writable.yaml; npm run start:prod"]
         {{- else }}
-        args: ["-c", "cp /data/thunderhub/account_config.yaml /data/ac_writable.yaml; npm start"]
+        args: ["-c", "cp /data/thunderhub/account_config.yaml /data/ac_writable.yaml; npm run start:prod"]
         {{- end }}
         env:
         - name: ACCOUNT_CONFIG_PATH
